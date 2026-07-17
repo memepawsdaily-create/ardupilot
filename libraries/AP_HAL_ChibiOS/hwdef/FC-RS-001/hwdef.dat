@@ -1,52 +1,161 @@
-# board ID for bootloader loader to match
-APJ_BOARD_ID 1007
+# hwdef.dat для кастомного полетного контроллера FC-RS-001 (VT40-2 V2)
+# Базируется на архитектуре MCU STM32H743VIT6
 
-# MCU: STM32H743IIT6
-MCU STM32H743xx STM32H743xx
+# Процессор и тактирование
+MCU STM32H743xx
+define STM32H7
 
-# crystal frequency
+# Кварц (8MHz — стандарт для плат на H7)
 OSCILLATOR_HZ 8000000
 
-# board voltage
-STM32_VDD 330U
-
-# ChibiOS system clock config
-define STM32_ST_USE_TIMER 5
-define STM32_ST_RESOLUTION 32
-
-# flash size
+# Настройка Flash памяти под ArduPilot (на H743 обычно 2MB)
 FLASH_SIZE_KB 2048
+FLASH_RESERVE_START_KB 128
 
-# --- ШИНЫ SPI ---
-PA5 SPI1_SCK SPI1
-PA6 SPI1_MISO SPI1
-PA7 SPI1_MOSI SPI1
+# Порядок загрузки и шины данных
+define HAL_WITH_UAVCAN 0
+define HAL_USE_ADC ON
 
-PB13 SPI2_SCK SPI2
-PB14 SPI2_MISO SPI2
-PB15 SPI2_MOSI SPI2
+# ОТКЛЮЧЕНИЕ GPS И КОМПАСА (Облегчение прошивки)
+define HAL_MIN_GPS_SENSORS 0
+define HAL_MAX_COMPASSES 0
 
+# Пищалка (Beeper) - пин B07 согласно дампу Betaflight
+PB07 BUZZER OUTPUT HIGH
+
+# Светодиоды статуса (LED)
+PE05 LED1 OUTPUT HIGH  # LED 1 (Красный/Синий статус)
+PE04 LED2 OUTPUT HIGH  # LED 2
+PE02 LED3 OUTPUT HIGH  # LED 3
+
+# Светодиодная лента (LED_STRIP)
+PA08 LED_STRIP OUTPUT
+
+# ----------------------------------------------------
+# МОТОРЫ (Выходы PWM / DShot)
+# Перенесено строго по таймерам вашего дампа (A00-A03, B00-B01, B04, B03)
+# ----------------------------------------------------
+PA00 MOTOR1 TIM2 CH1 Speed(400)
+PA01 MOTOR2 TIM2 CH2 Speed(400)
+PA02 MOTOR3 TIM2 CH3 Speed(400)
+PA03 MOTOR4 TIM2 CH4 Speed(400)
+PB00 MOTOR5 TIM1 CH2N Speed(400)
+PB01 MOTOR6 TIM1 CH3N Speed(400)
+PB04 MOTOR7 TIM22 CH1 Speed(400) # Назначен свободный канал таймера для B04
+PB03 MOTOR8 TIM22 CH2 Speed(400) # Назначен свободный канал таймера для B03
+
+# Сервоприводы (если используются)
+PD14 SERVO1 TIM4 CH3 Speed(50)
+PD15 SERVO2 TIM4 CH4 Speed(50)
+
+# ----------------------------------------------------
+# АНАЛОГОВЫЕ ВХОДЫ (АЦП)
+# Исправленный синтаксис вместо ошибочного ANALOG
+# ----------------------------------------------------
+PC01 BATT_VOLT_SENS ADC1 1   # Датчик напряжения батареи (Пин PC1 / ADC_BATT 1)
+PC03 BATT_CURR_SENS ADC1 3   # Датчик тока батареи (Пин PC3 / ADC_CURR 1)
+PC05 RSSI_IN ADC1 5          # Вход RSSI (Пин PC05 / ADC_RSSI 1)
+
+# Масштабирование сенсоров по умолчанию
+define HAL_BATT_VOLT_PIN 1
+define HAL_BATT_CURR_PIN 3
+define HAL_BATT_VOLT_SCALE 15.6
+define HAL_BATT_CURR_SCALE 14.0
+
+# ----------------------------------------------------
+# СЕНСОРЫ (Шины SPI и гироскопы)
+# Инициализация шин SPI1 (основная) и SPI4 (резервная)
+# ----------------------------------------------------
+# SPI1 для первого гироскопа/акселерометра
+PA05 SPI1_SCK SPI1
+PA06 SPI1_MISO SPI1
+PA07 SPI1_MOSI SPI1
+
+# SPI4 для второго гироскопа
 PE12 SPI4_SCK SPI4
 PE13 SPI4_MISO SPI4
 PE14 SPI4_MOSI SPI4
 
-# --- ПИНЫ ВЫБОРА ЧИПА (CS) ---
-PA4 GYRO_CS1 OUTPUT HIGH
-PE11 GYRO_CS2 OUTPUT HIGH
-PD15 OSD_CS OUTPUT HIGH
-PD3 FLASH_CS OUTPUT HIGH
+# Выбор чипов (Chip Select) и прерывания сенсоров
+PA04 GYRO_CS OUTPUT HIGH       # Первый гироскоп
+PE09 GYRO_EXTI INPUT           # Прерывание 1
 
-# --- ДАТЧИКИ И ШИНЫ ДАННЫХ ---
-# Светодиоды
-PC7 LED_BLUE OUTPUT HIGH
-PC8 LED_RED OUTPUT HIGH
+PE11 GYRO2_CS OUTPUT HIGH      # Второй гироскоп (если распаян)
+PE15 GYRO2_EXTI INPUT          # Прерывание 2
 
-# Бузер
-PD4 BUZZER OUTPUT HIGH
+# SPI2 для экранного меню (OSD MAX7456)
+PB13 SPI2_SCK SPI2
+PB14 SPI2_MISO SPI2
+PB15 SPI2_MOSI SPI2
+PB12 OSD_CS OUTPUT HIGH
 
-# Шинный датчик напряжения и тока
-PC2 BATT_VOLT_SENS ANALOG 1
-PC3 BATT_CURRENT_SENS ANALOG 2
+# Дефайны для драйверов сенсоров (автодетект ICM42688p или аналогичных)
+SPIDEV gyro1 SPI1 DEVICE(1) PA04 SPEED(10*MHZ) MODE(3)
+SPIDEV gyro2 SPI4 DEVICE(1) PE11 SPEED(10*MHZ) MODE(3)
+SPIDEV osd   SPI2 DEVICE(1) PB12 SPEED(10*MHZ) MODE(0)
 
-# USB-детекция
-PA9 VBUS INPUT
+# ----------------------------------------------------
+# ШИНА I2C (для барометра/периферии)
+# ----------------------------------------------------
+# I2C2
+PB10 I2C2_SCL I2C2
+PB11 I2C2_SDA I2C2
+
+# I2C4 (резервный)
+PD12 I2C4_SCL I2C4
+PD13 I2C4_SDA I2C4
+
+# Барометр (посажен на I2C2/I2C4 с автоопределением типа BMP280/DPS310/MS5611)
+I2C_ORDER I2C2 I2C4
+
+# ----------------------------------------------------
+# ПОСЛЕДОВАТЕЛЬНЫЕ ПОРТЫ (UARTs)
+# ----------------------------------------------------
+# UART1 (Основной приемник / CRSF / SBUS)
+PA09 USART1_TX USART1
+PA10 USART1_RX USART1
+
+# UART2
+PD05 USART2_TX USART2
+PD06 USART2_RX USART2
+
+# UART3
+PD08 USART3_TX USART3
+PD09 USART3_RX USART3
+
+# UART4
+PD01 UART4_TX UART4
+PD00 UART4_RX UART4
+
+# UART5
+PB06 UART5_TX UART5
+PB05 UART5_RX UART5
+
+# UART6
+PC06 USART6_TX USART6
+PC07 USART6_RX USART6
+
+# UART7
+PE08 UART7_TX UART7
+PE07 UART7_RX UART7
+
+# UART8
+PE01 UART8_TX UART8
+PE00 UART8_RX UART8
+
+# Карта распределения SERIAL в ArduPilot
+# TELEMETRY1 - UART3, TELEMETRY2 - UART2, GPS1 - UART4, etc.
+SERIAL_ORDER OTG1 USART1 USART2 USART3 UART4 UART5 USART6 UART7 UART8
+
+# ----------------------------------------------------
+# КАРТА ПАМЯТИ MicroSD (SDIO)
+# ----------------------------------------------------
+PC12 SDMMC1_CK SDMMC1
+PD02 SDMMC1_CMD SDMMC1
+PC08 SDMMC1_D0 SDMMC1
+PC09 SDMMC1_D1 SDMMC1
+PC10 SDMMC1_D2 SDMMC1
+PC11 SDMMC1_D3 SDMMC1
+
+# Включаем логирование на карту памяти
+define HAL_LOGGING_DATAFLASH ON
