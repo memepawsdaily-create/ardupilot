@@ -2,7 +2,7 @@
 # Базируется на архитектуре MCU STM32H743VIT6
 
 # Процессор и тактирование
-MCU STM32H743xx STM32H743VI
+MCU STM32H743xx STM32H743xI
 define STM32H7
 
 # Кварц (8MHz — стандарт для плат на H7)
