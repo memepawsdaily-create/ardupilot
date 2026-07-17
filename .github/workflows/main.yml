@@ -1,0 +1,33 @@
+name: Build Custom ArduPilot
+
+on:
+  workflow_dispatch: # Позволяет запускать сборку вручную кнопкой
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Install Prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip python3-setuptools python3-wheel
+          # Устанавливаем необходимые зависимости для сборки ArduPilot
+          pip3 install empy==3.3.4 pexpect
+
+      - name: Configure and Build
+        run: |
+          ./waf configure --board FC-RS-001
+          ./waf copter
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: FC-RS-001-Firmware
+          path: |
+            build/FC-RS-001/bin/arducopter.hex
+            build/FC-RS-001/bin/arducopter.apj
