@@ -43,9 +43,9 @@ PB01 PWM6 OUTPUT
 PB04 PWM7 OUTPUT
 PB03 PWM8 OUTPUT
 
-# Сервоприводы (если используются)
-PD14 SERVO1 TIM4 CH3 Speed(50)
-PD15 SERVO2 TIM4 CH4 Speed(50)
+# Сервоприводы (Выходы PWM 9 и 10)
+PD14 PWM9 OUTPUT
+PD15 PWM10 OUTPUT
 
 # ----------------------------------------------------
 # АНАЛОГОВЫЕ ВХОДЫ (АЦП)
