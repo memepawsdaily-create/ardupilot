@@ -32,24 +32,24 @@ PE02 LED3 OUTPUT HIGH  # LED 3
 PA08 LED_STRIP OUTPUT
 
 # ----------------------------------------------------
-# МОТОРЫ (Выходы PWM / DShot)
+# МОТОРЫ И СЕРВОПРИВОДЫ (Выходы PWM / DShot)
+# Все выходы объявлены через корректный формат PWMx OUTPUT
 # ----------------------------------------------------
-PA00 PWM1 OUTPUT
-PA01 PWM2 OUTPUT
-PA02 PWM3 OUTPUT
-PA03 PWM4 OUTPUT
-PB00 PWM5 OUTPUT
-PB01 PWM6 OUTPUT
-PB04 PWM7 OUTPUT
-PB03 PWM8 OUTPUT
+PA00 PWM1 OUTPUT  # Мотор 1
+PA01 PWM2 OUTPUT  # Мотор 2
+PA02 PWM3 OUTPUT  # Мотор 3
+PA03 PWM4 OUTPUT  # Мотор 4
+PB00 PWM5 OUTPUT  # Мотор 5
+PB01 PWM6 OUTPUT  # Мотор 6
+PB04 PWM7 OUTPUT  # Мотор 7
+PB03 PWM8 OUTPUT  # Мотор 8
 
 # Сервоприводы (Выходы PWM 9 и 10)
-PD14 PWM9 OUTPUT
-PD15 PWM10 OUTPUT
+PD14 PWM9 OUTPUT  # Серво 1 (вместо PD14 SERVO1 TIM4...)
+PD15 PWM10 OUTPUT # Серво 2 (вместо PD15 SERVO2 TIM4...)
 
 # ----------------------------------------------------
 # АНАЛОГОВЫЕ ВХОДЫ (АЦП)
-# Исправленный синтаксис вместо ошибочного ANALOG
 # ----------------------------------------------------
 PC01 BATT_VOLT_SENS ADC1 1   # Датчик напряжения батареи (Пин PC1 / ADC_BATT 1)
 PC03 BATT_CURR_SENS ADC1 3   # Датчик тока батареи (Пин PC3 / ADC_CURR 1)
@@ -63,7 +63,6 @@ define HAL_BATT_CURR_SCALE 14.0
 
 # ----------------------------------------------------
 # СЕНСОРЫ (Шины SPI и гироскопы)
-# Инициализация шин SPI1 (основная) и SPI4 (резервная)
 # ----------------------------------------------------
 # SPI1 для первого гироскопа/акселерометра
 PA05 SPI1_SCK SPI1
@@ -79,7 +78,7 @@ PE14 SPI4_MOSI SPI4
 PA04 GYRO_CS OUTPUT HIGH       # Первый гироскоп
 PE09 GYRO_EXTI INPUT           # Прерывание 1
 
-PE11 GYRO2_CS OUTPUT HIGH      # Второй гироскоп (если распаян)
+PE11 GYRO2_CS OUTPUT HIGH      # Второй гироскоп
 PE15 GYRO2_EXTI INPUT          # Прерывание 2
 
 # SPI2 для экранного меню (OSD MAX7456)
@@ -88,7 +87,7 @@ PB14 SPI2_MISO SPI2
 PB15 SPI2_MOSI SPI2
 PB12 OSD_CS OUTPUT HIGH
 
-# Дефайны для драйверов сенсоров (автодетект ICM42688p или аналогичных)
+# Дефайны для драйверов сенсоров
 SPIDEV gyro1 SPI1 DEVICE(1) PA04 SPEED(10*MHZ) MODE(3)
 SPIDEV gyro2 SPI4 DEVICE(1) PE11 SPEED(10*MHZ) MODE(3)
 SPIDEV osd   SPI2 DEVICE(1) PB12 SPEED(10*MHZ) MODE(0)
@@ -104,7 +103,7 @@ PB11 I2C2_SDA I2C2
 PD12 I2C4_SCL I2C4
 PD13 I2C4_SDA I2C4
 
-# Барометр (посажен на I2C2/I2C4 с автоопределением типа BMP280/DPS310/MS5611)
+# Порядок поиска барометра
 I2C_ORDER I2C2 I2C4
 
 # ----------------------------------------------------
@@ -143,7 +142,6 @@ PE01 UART8_TX UART8
 PE00 UART8_RX UART8
 
 # Карта распределения SERIAL в ArduPilot
-# TELEMETRY1 - UART3, TELEMETRY2 - UART2, GPS1 - UART4, etc.
 SERIAL_ORDER OTG1 USART1 USART2 USART3 UART4 UART5 USART6 UART7 UART8
 
 # ----------------------------------------------------
