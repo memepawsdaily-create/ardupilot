@@ -1,7 +1,7 @@
 name: Build Custom ArduPilot
 
 on:
-  workflow_dispatch: # Позволяет запускать сборку вручную кнопкой
+  workflow_dispatch:
 
 jobs:
   build:
@@ -12,18 +12,22 @@ jobs:
         with:
           submodules: 'recursive'
 
-      - name: Install Prerequisites
+      - name: Install System Prerequisites
         run: |
           sudo apt-get update
-          sudo apt-get install -y python3-pip python3-setuptools python3-wheel
-          # Устанавливаем необходимые зависимости для сборки ArduPilot
+          sudo apt-get install -y python3-pip python3-setuptools python3-wheel python3-jinja2 python3-future python3-click
           pip3 install empy==3.3.4 pexpect
+
+      - name: Install ARM GCC Toolchain
+        run: |
+          # Автоматически скачиваем и устанавливаем тулчейн компилятора GCC ARM в систему
+          sudo apt-get install -y gcc-arm-none-eabi
 
       - name: Configure and Build
         run: |
           ./waf configure --board FC-RS-001
           ./waf copter
-
+          
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
