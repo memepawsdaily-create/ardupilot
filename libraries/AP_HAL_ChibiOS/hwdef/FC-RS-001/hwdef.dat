@@ -20,40 +20,39 @@ define HAL_USE_ADC ON
 define HAL_MIN_GPS_SENSORS 0
 define HAL_MAX_COMPASSES 0
 
-# Пищалка (Beeper) - пин B07 согласно дампу Betaflight
-PB07 BUZZER OUTPUT HIGH
+# Пищалка (Beeper) - пин B7
+PB7 BUZZER OUTPUT HIGH
 
 # Светодиоды статуса (LED)
-PE05 LED1 OUTPUT HIGH # LED 1 (Красный/Синий статус)
+PE5 LED1 OUTPUT HIGH # LED 1 (Красный/Синий статус)
 PE04 LED2 OUTPUT HIGH # LED 2
-PE02 LED3 OUTPUT HIGH # LED 3
+PE2 LED3 OUTPUT HIGH # LED 3
 
 # Светодиодная лента (LED_STRIP)
-PA08 LED_STRIP OUTPUT
+PA8 LED_STRIP OUTPUT
 
 # ----------------------------------------------------
 # МОТОРЫ И СЕРВОПРИВОДЫ (Выходы PWM / DShot)
-# Все выходы объявлены через корректный формат PWMx OUTPUT
 # ----------------------------------------------------
-PA00 PWM1 OUTPUT # Мотор 1
-PA01 PWM2 OUTPUT # Мотор 2
-PA02 PWM3 OUTPUT # Мотор 3
-PA03 PWM4 OUTPUT # Мотор 4
-PB00 PWM5 OUTPUT # Мотор 5
-PB01 PWM6 OUTPUT # Мотор 6
-PB04 PWM7 OUTPUT # Мотор 7
-PB03 PWM8 OUTPUT # Мотор 8
+PA0 PWM1 OUTPUT # Мотор 1
+PA1 PWM2 OUTPUT # Мотор 2
+PA2 PWM3 OUTPUT # Мотор 3
+PA3 PWM4 OUTPUT # Мотор 4
+PB0 PWM5 OUTPUT # Мотор 5
+PB1 PWM6 OUTPUT # Мотор 6
+PB4 PWM7 OUTPUT # Мотор 7
+PB3 PWM8 OUTPUT # Мотор 8
 
 # Сервоприводы (Выходы PWM 9 и 10)
-PD14 PWM9 OUTPUT # Серво 1 (вместо PD14 SERVO1 TIM4...)
-PD15 PWM10 OUTPUT # Серво 2 (вместо PD15 SERVO2 TIM4...)
+PD14 PWM9 OUTPUT # Серво 1
+PD15 PWM10 OUTPUT # Серво 2
 
 # ----------------------------------------------------
 # АНАЛОГОВЫЕ ВХОДЫ (АЦП)
 # ----------------------------------------------------
-PC01 BATT_VOLT_SENS ADC1 1 # Датчик напряжения батареи (Пин PC1 / ADC_BATT 1)
-PC03 BATT_CURR_SENS ADC1 3 # Датчик тока батареи (Пин PC3 / ADC_CURR 1)
-PC05 RSSI_IN ADC1 5 # Вход RSSI (Пин PC05 / ADC_RSSI 1)
+PC1 BATT_VOLT_SENS ADC1 1 # Датчик напряжения батареи (Пин PC1 / ADC_BATT 1)
+PC3 BATT_CURR_SENS ADC1 3 # Датчик тока батареи (Пин PC3 / ADC_CURR 1)
+PC5 RSSI_IN ADC1 5 # Вход RSSI (Пин PC5 / ADC_RSSI 1)
 
 # Масштабирование сенсоров по умолчанию
 define HAL_BATT_VOLT_PIN 1
@@ -65,30 +64,31 @@ define HAL_BATT_CURR_SCALE 14.0
 # СЕНСОРЫ (Шины SPI и гироскопы)
 # ----------------------------------------------------
 # SPI1 для первого гироскопа/акселерометра
-PA05 SPI1_SCK SPI1
-PA06 SPI1_MISO SPI1
-PA07 SPI1_MOSI SPI1
+PA5 SPI1_SCK SPI1
+PA6 SPI1_MISO SPI1
+PA7 SPI1_MOSI SPI1
 
 # SPI4 для второго гироскопа
 PE12 SPI4_SCK SPI4
 PE13 SPI4_MISO SPI4
 PE14 SPI4_MOSI SPI4
 
-# Выбор чипов (Chip Select) и прерывания сенсоров
-PA04 GYRO_CS OUTPUT HIGH # Первый гироскоп
-PE09 GYRO_EXTI INPUT # Прерывание 1
-
-PE11 GYRO2_CS OUTPUT HIGH # Второй гироскоп
-PE15 GYRO2_EXTI INPUT # Прерывание 2
-
 # SPI2 для экранного меню (OSD MAX7456)
 PB13 SPI2_SCK SPI2
 PB14 SPI2_MISO SPI2
 PB15 SPI2_MOSI SPI2
+
+# Выбор чипов (Chip Select) и прерывания сенсоров
+PA4 GYRO_CS OUTPUT HIGH # Первый гироскоп
+PE9 GYRO_EXTI INPUT # Прерывание 1
+
+PE11 GYRO2_CS OUTPUT HIGH # Второй гироскоп
+PE15 GYRO2_EXTI INPUT # Прерывание 2
+
 PB12 OSD_CS OUTPUT HIGH
 
 # Дефайны для драйверов сенсоров
-SPIDEV gyro1 SPI1 DEVICE(1) PA04 SPEED(10*MHZ) MODE(3)
+SPIDEV gyro1 SPI1 DEVICE(1) PA4 SPEED(10*MHZ) MODE(3)
 SPIDEV gyro2 SPI4 DEVICE(1) PE11 SPEED(10*MHZ) MODE(3)
 SPIDEV osd SPI2 DEVICE(1) PB12 SPEED(10*MHZ) MODE(0)
 
@@ -110,36 +110,36 @@ I2C_ORDER I2C2 I2C4
 # ПОСЛЕДОВАТЕЛЬНЫЕ ПОРТЫ (UARTs)
 # ----------------------------------------------------
 # UART1 (Основной приемник / CRSF / SBUS)
-PA09 USART1_TX USART1
+PA9 USART1_TX USART1
 PA10 USART1_RX USART1
 
 # UART2
-PD05 USART2_TX USART2
-PD06 USART2_RX USART2
+PD5 USART2_TX USART2
+PD6 USART2_RX USART2
 
 # UART3
-PD08 USART3_TX USART3
-PD09 USART3_RX USART3
+PD8 USART3_TX USART3
+PD9 USART3_RX USART3
 
 # UART4
-PD01 UART4_TX UART4
-PD00 UART4_RX UART4
+PD1 UART4_TX UART4
+PD0 UART4_RX UART4
 
 # UART5
-PB06 UART5_TX UART5
-PB05 UART5_RX UART5
+PB6 UART5_TX UART5
+PB5 UART5_RX UART5
 
 # UART6
 PC06 USART6_TX USART6
 PC07 USART6_RX USART6
 
 # UART7
-PE08 UART7_TX UART7
-PE07 UART7_RX UART7
+PE8 UART7_TX UART7
+PE7 UART7_RX UART7
 
 # UART8
-PE01 UART8_TX UART8
-PE00 UART8_RX UART8
+PE1 UART8_TX UART8
+PE0 UART8_RX UART8
 
 # Карта распределения SERIAL в ArduPilot
 SERIAL_ORDER OTG1 USART1 USART2 USART3 UART4 UART5 USART6 UART7 UART8
@@ -148,9 +148,9 @@ SERIAL_ORDER OTG1 USART1 USART2 USART3 UART4 UART5 USART6 UART7 UART8
 # КАРТА ПАМЯТИ MicroSD (SDIO)
 # ----------------------------------------------------
 PC12 SDMMC1_CK SDMMC1
-PD02 SDMMC1_CMD SDMMC1
-PC08 SDMMC1_D0 SDMMC1
-PC09 SDMMC1_D1 SDMMC1
+PD2 SDMMC1_CMD SDMMC1
+PC8 SDMMC1_D0 SDMMC1
+PC9 SDMMC1_D1 SDMMC1
 PC10 SDMMC1_D2 SDMMC1
 PC11 SDMMC1_D3 SDMMC1
 
