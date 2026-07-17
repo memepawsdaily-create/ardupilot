@@ -33,16 +33,15 @@ PA08 LED_STRIP OUTPUT
 
 # ----------------------------------------------------
 # МОТОРЫ (Выходы PWM / DShot)
-# Перенесено строго по таймерам вашего дампа (A00-A03, B00-B01, B04, B03)
 # ----------------------------------------------------
-PA00 MOTOR1 TIM2 CH1 Speed(400)
-PA01 MOTOR2 TIM2 CH2 Speed(400)
-PA02 MOTOR3 TIM2 CH3 Speed(400)
-PA03 MOTOR4 TIM2 CH4 Speed(400)
-PB00 MOTOR5 TIM1 CH2N Speed(400)
-PB01 MOTOR6 TIM1 CH3N Speed(400)
-PB04 MOTOR7 TIM22 CH1 Speed(400) # Назначен свободный канал таймера для B04
-PB03 MOTOR8 TIM22 CH2 Speed(400) # Назначен свободный канал таймера для B03
+PA00 MOTOR1 PWM1
+PA01 MOTOR2 PWM2
+PA02 MOTOR3 PWM3
+PA03 MOTOR4 PWM4
+PB00 MOTOR5 PWM5
+PB01 MOTOR6 PWM6
+PB04 MOTOR7 PWM7
+PB03 MOTOR8 PWM8
 
 # Сервоприводы (если используются)
 PD14 SERVO1 TIM4 CH3 Speed(50)
