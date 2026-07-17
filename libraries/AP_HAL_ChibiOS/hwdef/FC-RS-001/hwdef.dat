@@ -34,14 +34,14 @@ PA08 LED_STRIP OUTPUT
 # ----------------------------------------------------
 # МОТОРЫ (Выходы PWM / DShot)
 # ----------------------------------------------------
-PA00 MOTOR1 PWM 1
-PA01 MOTOR2 PWM 2
-PA02 MOTOR3 PWM 3
-PA03 MOTOR4 PWM 4
-PB00 MOTOR5 PWM 5
-PB01 MOTOR6 PWM 6
-PB04 MOTOR7 PWM 7
-PB03 MOTOR8 PWM 8
+PA00 PWM1 OUTPUT
+PA01 PWM2 OUTPUT
+PA02 PWM3 OUTPUT
+PA03 PWM4 OUTPUT
+PB00 PWM5 OUTPUT
+PB01 PWM6 OUTPUT
+PB04 PWM7 OUTPUT
+PB03 PWM8 OUTPUT
 
 # Сервоприводы (если используются)
 PD14 SERVO1 TIM4 CH3 Speed(50)
